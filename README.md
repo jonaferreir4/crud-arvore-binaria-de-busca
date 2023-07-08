@@ -1,3 +1,3 @@
 # crud-arvore-binaria-de-busca
 
-CRUD simples de um cadastro de alunos usando árvore binária de busca
+CRUD de um cadastro simples de alunos usando árvore binária de busca

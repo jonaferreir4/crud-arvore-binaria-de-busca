@@ -77,7 +77,6 @@ NO *achar_sucessor(NO *pt) {
     return achar_sucessor(pt->esq);
 }
 
-
 void atualizar_arvore(int id) {
     NO *alunoEncontrado = busca_arvore(id, raiz);
     if (alunoEncontrado != NULL) {

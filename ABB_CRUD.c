@@ -67,6 +67,7 @@ void insercao_arvore(int id, const char *nome, const char *curso) {
         pt1->dir = NULL;
         pt1->pai = pt;
         raiz = pt1;
+        printf("Aluno adicionado!\n");
     }
 }
 
@@ -79,7 +80,7 @@ NO *achar_sucessor(NO *pt) {
 
 void atualizar_arvore(int id) {
     NO *alunoEncontrado = busca_arvore(id, raiz);
-    if (alunoEncontrado != NULL) {
+    if (alunoEncontrado->aluno.id == id) {
         char novoNome[50];
         char novoCurso[50];
         
@@ -101,6 +102,9 @@ void atualizar_arvore(int id) {
 
 void remover(int x) {
     NO *pt = busca_arvore(x, raiz);
+    if (pt->aluno.id != x){
+        printf("O aluno nao foi encontrado!\n");
+    }else{
 
     if (pt->dir == NULL && pt->esq == NULL) { // folha
         if (pt->pai != NULL) {
@@ -113,6 +117,7 @@ void remover(int x) {
             raiz = NULL;
         }
         free(pt);
+        printf("aluno removido com sucesso\n");
     } else if ((pt->dir == NULL) ^ (pt->esq == NULL)) { // com um filho
         if (pt->dir == NULL) {
             pt->pai->dir = pt->esq;
@@ -120,11 +125,13 @@ void remover(int x) {
             pt->pai->esq = pt->dir;
         }
         free(pt);
+        printf("aluno removido com sucesso\n");
     } else {
         NO *sucessor = achar_sucessor(pt->dir);
         int temp = sucessor->aluno.id;
         remover(sucessor->aluno.id);
         pt->aluno.id = temp;
+    }
     }
 }
 

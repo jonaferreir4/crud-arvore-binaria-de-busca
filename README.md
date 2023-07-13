@@ -1,3 +1,3 @@
 # crud-arvore-binaria-de-busca
 
-CRUD de um cadastro simples de alunos usando árvore binária de busca
+CRUD de um sistema de cadastro de jogos utilizando árvore binária de busca

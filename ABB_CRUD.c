@@ -1,15 +1,21 @@
+// Sistema de cadastro de jogos
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct aluno {
+typedef struct jogo {
     int id;
     char nome[50];
-    char curso[50];
-} Aluno;
+    char plataforma[50];
+    char desenvolvedora[50];
+    char genero[50];
+    int ano;
+
+} JOGO;
 
 typedef struct no {
-    Aluno aluno;
+    JOGO jogo;
     struct no *dir;
     struct no *esq;
     struct no *pai;
@@ -17,12 +23,17 @@ typedef struct no {
 
 NO *raiz = NULL;
 
+void limpar_buffer_entrada() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
 NO *busca_arvore(int x, NO *pt) {
     if (pt == NULL) {
         return NULL;
-    } else if (x == pt->aluno.id) {
+    } else if (x == pt->jogo.id) {
         return pt;
-    } else if (x < pt->aluno.id) {
+    } else if (x < pt->jogo.id) {
         if (pt->esq == NULL) {
             return pt;
         } else {
@@ -38,36 +49,42 @@ NO *busca_arvore(int x, NO *pt) {
 }
 
 
-void insercao_arvore(int id, const char *nome, const char *curso) {
-    Aluno aluno;
-    aluno.id = id;
-    strncpy(aluno.nome, nome, sizeof(aluno.nome) - 1);
-    strncpy(aluno.curso, curso, sizeof(aluno.curso) - 1);
+void insercao_arvore(int id, const char *nome, const char *plataforma, const char *desenvolvedora, const char * genero, int ano) {
+    JOGO novoJogo;
+
+    novoJogo.id = id;
+    strncpy(novoJogo.nome, nome, sizeof(novoJogo.nome) - 1);
+    strncpy(novoJogo.plataforma, plataforma, sizeof(novoJogo.plataforma) - 1);
+    strncpy(novoJogo.desenvolvedora, desenvolvedora, sizeof(novoJogo.desenvolvedora) - 1);
+    strncpy(novoJogo.genero, genero, sizeof(novoJogo.genero) - 1);
+    novoJogo.ano = ano;
 
     NO *pt = busca_arvore(id, raiz);
     if (pt != NULL) {
-        if (pt->aluno.id == id) {
+        if (pt->jogo.id == id) {
             printf("Chave duplicada!\n");
         } else {
             NO *pt1 = malloc(sizeof(NO));
-            pt1->aluno = aluno;
+            pt1->jogo = novoJogo;
             pt1->esq = NULL;
             pt1->dir = NULL;
-            if (id < pt->aluno.id) {
+            if (id < pt->jogo.id) {
                 pt->esq = pt1;
+                printf("jogo adicionado!\n");
             } else {
                 pt->dir = pt1;
+                printf("jogo adicionado!\n");
             }
             pt1->pai = pt;
         }
     } else {
         NO *pt1 = malloc(sizeof(NO));
-        pt1->aluno = aluno;
+        pt1->jogo = novoJogo;
         pt1->esq = NULL;
         pt1->dir = NULL;
         pt1->pai = pt;
         raiz = pt1;
-        printf("Aluno adicionado!\n");
+        printf("jogo adicionado!\n");
     }
 }
 
@@ -79,22 +96,79 @@ NO *achar_sucessor(NO *pt) {
 }
 
 void atualizar_arvore(int id) {
-    NO *alunoEncontrado = busca_arvore(id, raiz);
-    if (alunoEncontrado->aluno.id == id) {
+    NO *jogoEncontrado = busca_arvore(id, raiz);
+    if (jogoEncontrado->jogo.id == id) {
+        int op;
         char novoNome[50];
-        char novoCurso[50];
-        
-        printf("Digite o novo nome do aluno: ");
-        scanf("%s", novoNome);
-        printf("Digite o novo curso do aluno: ");
-        scanf("%s", novoCurso);
+        char novaPlataforma[50];
+        char novadesenvolvedora[50];
+        char novoGenero[50];
+        int novoAno;
 
-        strncpy(alunoEncontrado->aluno.nome, novoNome, sizeof(alunoEncontrado->aluno.nome) - 1);
-        strncpy(alunoEncontrado->aluno.curso, novoCurso, sizeof(alunoEncontrado->aluno.curso) - 1);
+            printf("Qual informacao voce quer atualizar?\n");
+            printf("1 - Nome do jogo\n");
+            printf("2 - Plataforma do jogo\n");
+            printf("3 - Desenvolvedora do jogo\n");
+            printf("4 - Genero do jogo\n");
+            printf("5 - Ano do jogo\n");
+            printf("0 - cancelar atualizacao\n");
+            scanf("%d", &op);
 
-        printf("Aluno atualizado com sucesso.\n");
-    } else {
-        printf("Aluno nao encontrado.\n");
+            switch(op){
+                case 1:{
+                    printf("Digite o novo nome do jogo: ");
+                    scanf("%s", novoNome);
+                    limpar_buffer_entrada();
+                    strncpy(jogoEncontrado->jogo.nome, novoNome, sizeof(jogoEncontrado->jogo.nome) - 1);
+                    printf("Nome atualizado!\n");
+                    break;
+                }
+                case 2:{
+                    printf("Digite a nova plataforma do jogo: ");
+                    scanf("%s", novaPlataforma);
+                    limpar_buffer_entrada();
+                    strncpy(jogoEncontrado->jogo.plataforma, novaPlataforma, sizeof(jogoEncontrado->jogo.plataforma) - 1);
+                    printf("Plataforma atualizada!\n");
+                    break;
+                }
+                case 3:{
+                    printf("Digite a nova desenvolvedora do jogo: ");
+                    scanf("%s", novadesenvolvedora);
+                    limpar_buffer_entrada();
+                    strncpy(jogoEncontrado->jogo.desenvolvedora, novadesenvolvedora, sizeof(jogoEncontrado->jogo.desenvolvedora) - 1);
+                    printf("Desenvolvedora atualizada!\n");
+                    break;
+                }
+                case 4:{
+                    printf("Digite o novo genero do jogo: ");
+                    scanf("%s", novoGenero);
+                    limpar_buffer_entrada();
+                    strncpy(jogoEncontrado->jogo.genero, novoGenero, sizeof(jogoEncontrado->jogo.genero) - 1);
+                    printf("Genero atualizado!\n");
+                    break;
+                }
+                case 5:{
+                    limpar_buffer_entrada();
+                   while(printf("Digite o ano do jogo: ") && scanf("%d", &novoAno) != 1){
+                    printf("Ano invalido\n");
+                    limpar_buffer_entrada();
+
+                } 
+                    limpar_buffer_entrada();
+                    jogoEncontrado->jogo.ano  = novoAno;
+                    printf("Ano atualizado!\n");
+                    break;
+                }
+                case 0:
+                    printf("atualizacao cancelada!");
+                    break;
+                default:
+                    printf("opcao invalida!");
+                    break;
+            }
+
+            } else {
+                 printf("jogo nao encontrado.\n");
     }
 }
 
@@ -102,13 +176,17 @@ void atualizar_arvore(int id) {
 
 void remover(int x) {
     NO *pt = busca_arvore(x, raiz);
-    if (pt->aluno.id != x){
-        printf("O aluno nao foi encontrado!\n");
+    if (pt == NULL){
+        printf("Nao ha jogos cadastrados!\n");
+    }else {
+
+    if (pt->jogo.id != x){
+        printf("O jogo nao foi encontrado!\n");
     }else{
 
     if (pt->dir == NULL && pt->esq == NULL) { // folha
         if (pt->pai != NULL) {
-            if (pt->aluno.id < pt->pai->aluno.id) {
+            if (pt->jogo.id < pt->pai->jogo.id) {
                 pt->pai->esq = NULL;
             } else {
                 pt->pai->dir = NULL;
@@ -117,7 +195,7 @@ void remover(int x) {
             raiz = NULL;
         }
         free(pt);
-        printf("aluno removido com sucesso\n");
+        printf("jogo removido com sucesso\n");
     } else if ((pt->dir == NULL) ^ (pt->esq == NULL)) { // com um filho
         if (pt->dir == NULL) {
             pt->pai->dir = pt->esq;
@@ -125,23 +203,28 @@ void remover(int x) {
             pt->pai->esq = pt->dir;
         }
         free(pt);
-        printf("aluno removido com sucesso\n");
+        printf("jogo removido com sucesso\n");
     } else {
         NO *sucessor = achar_sucessor(pt->dir);
-        int temp = sucessor->aluno.id;
-        remover(sucessor->aluno.id);
-        pt->aluno.id = temp;
+        int temp = sucessor->jogo.id;
+        remover(sucessor->jogo.id);
+        pt->jogo.id = temp;
+    }
     }
     }
 }
 
 void pre(NO *pt) {
-    printf("ID: %d | Nome: %s | Curso: %s\n", pt->aluno.id, pt->aluno.nome, pt->aluno.curso);
+    if(pt == NULL){
+        printf("Nao ha jogos cadastrados!\n");
+    }else{
+    printf("ID: %d - Nome: %s - plataforma: %s - desenvolvedora: %s - genero: %s - ano: %d\n", pt->jogo.id, pt->jogo.nome, pt->jogo.plataforma, pt->jogo.desenvolvedora, pt->jogo.genero, pt->jogo.ano);
     if (pt->esq != NULL) {
         pre(pt->esq);
     }
     if (pt->dir != NULL) {
         pre(pt->dir);
+    }
     }
 }
 
@@ -149,59 +232,97 @@ int main() {
     int op;
 
     do {
-        printf("_____ MENU _____\n");
-        printf("1 - cadastrar aluno\n");
-        printf("2 - pesquisar aluno\n");
-        printf("3 - listar alunos\n");
-        printf("4 - atualizar aluno\n");
-        printf("5 - deletar aluno\n");
+        printf("\n_____ MENU _____\n");
+        printf("1 - cadastrar jogo\n");
+        printf("2 - pesquisar jogo\n");
+        printf("3 - listar jogos\n");
+        printf("4 - atualizar jogo\n");
+        printf("5 - deletar jogo\n");
         printf("0 - sair\n");
         printf("Escolha a opcao que deseja: ");
         scanf("%d", &op);
 
         switch (op) {
             case 1: {
-                int id;
+                 int id;
                 char nome[50];
-                char curso[50];
-                printf("Digite o ID do aluno: ");
-                scanf("%d", &id);
-                printf("Digite o nome do aluno: ");
-                scanf("%s", nome);
-                printf("Digite o curso do aluno: ");
-                scanf("%s", curso);
-                insercao_arvore(id, nome, curso);
+                char plataforma[50];
+                char desenvolvedora[50];
+                char genero[50];
+                int ano;
+
+               
+                while ( printf("Digite o ID do jogo: ") && scanf("%d", &id) != 1) {
+                    printf("Entrada invalida!\n");
+                    limpar_buffer_entrada();
+                }
+                limpar_buffer_entrada();
+
+                printf("Digite o nome do jogo: ");
+                fgets(nome, sizeof(nome), stdin);
+                nome[strcspn(nome, "\n")] = '\0';
+
+                printf("Digite a plataforma do jogo: ");
+                fgets(plataforma, sizeof(plataforma), stdin);
+                plataforma[strcspn(plataforma, "\n")] = '\0';
+
+                printf("Digite o desenvolvedora do jogo: ");
+                fgets(desenvolvedora, sizeof(desenvolvedora), stdin);
+                desenvolvedora[strcspn(desenvolvedora, "\n")] = '\0';
+
+                printf("Digite o genero do jogo: ");
+                fgets(genero, sizeof(genero), stdin);
+                genero[strcspn(genero, "\n")] = '\0';
+
+                while(printf("Digite o ano do jogo: ") && scanf("%d", &ano) != 1){
+                    printf("Ano invalido\n");
+                    limpar_buffer_entrada();
+
+                } 
+                limpar_buffer_entrada();
+                
+                insercao_arvore(id, nome, plataforma, desenvolvedora, genero, ano);
                 break;
             }
             case 2: {
                 int id;
-                printf("Digite o ID do aluno a ser pesquisado: ");
-                scanf("%d", &id);
+                while ( printf("Digite o ID do jogo: ") && scanf("%d", &id) != 1) {
+                    printf("Entrada invalida!\n");
+                    limpar_buffer_entrada();
+                }
+                limpar_buffer_entrada();
 
-                NO *alunoEncontrado = busca_arvore(id, raiz);
-                if (alunoEncontrado != NULL) {
-                    printf("Aluno encontrado:\n");
-                    printf("ID: %d - Nome: %s - Curso: %s\n", alunoEncontrado->aluno.id, alunoEncontrado->aluno.nome, alunoEncontrado->aluno.curso);
+                NO *jogoEncontrado = busca_arvore(id, raiz);
+                if (jogoEncontrado->jogo.id == id) {
+                    printf("jogo encontrado:\n");
+                    printf("ID: %d - Nome: %s - plataforma: %s - desenvolvedora: %s - genero: %s - ano: %d\n", jogoEncontrado->jogo.id, jogoEncontrado->jogo.nome, jogoEncontrado->jogo.plataforma, jogoEncontrado->jogo.desenvolvedora, jogoEncontrado->jogo.genero, jogoEncontrado->jogo.ano);
                 } else {
-                    printf("Aluno nao encontrado.\n");
+                    printf("jogo nao encontrado.\n");
                 }
                 break;
             }
             case 3:
-                printf("Listagem de alunos:\n");
+                printf("Listagem de jogos:\n");
                 pre(raiz);
                 break;
             case 4: {
                 int id;
-                printf("Digite o ID do aluno para atualiza-lo: ");
-                scanf("%d", &id);
+                while ( printf("Digite o ID do jogo a ser atualizado: ") && scanf("%d", &id) != 1) {
+                    printf("Entrada invalida!\n");
+                    limpar_buffer_entrada();
+                }
+                limpar_buffer_entrada();
+
                 atualizar_arvore(id);
                 break;
             }
             case 5: {
                 int id;
-                printf("Digite o ID do aluno para remove-lo: ");
-                scanf("%d", &id);
+               while ( printf("Digite o ID para remove-lo: ") && scanf("%d", &id) != 1) {
+                    printf("Entrada invalida!\n");
+                    limpar_buffer_entrada();
+                }
+                limpar_buffer_entrada();
                 remover(id);
                 break;
             }

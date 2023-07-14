@@ -62,7 +62,7 @@ void insercao_arvore(int id, const char *nome, const char *plataforma, const cha
     NO *pt = busca_arvore(id, raiz);
     if (pt != NULL) {
         if (pt->jogo.id == id) {
-            printf("Chave duplicada!\n");
+            printf("Ja existe um jogo com esse ID!\n");
         } else {
             NO *pt1 = malloc(sizeof(NO));
             pt1->jogo = novoJogo;
@@ -119,45 +119,46 @@ void atualizar_arvore(int id) {
 
             switch(op){
                 case 1:{
-                    printf("Digite o novo nome do jogo: ");
-                    scanf("%s", novoNome);
+                    printf("Digite o nome do jogo: ");
                     limpar_buffer_entrada();
+                    fgets(novoNome, sizeof(novoNome), stdin);
+                    novoNome[strcspn(novoNome, "\n")] = '\0';
                     strncpy(jogoEncontrado->jogo.nome, novoNome, sizeof(jogoEncontrado->jogo.nome) - 1);
                     printf("Nome atualizado!\n");
                     break;
                 }
                 case 2:{
                     printf("Digite a nova plataforma do jogo: ");
-                    scanf("%s", novaPlataforma);
                     limpar_buffer_entrada();
+                    fgets(novaPlataforma, sizeof(novaPlataforma), stdin);
+                    novaPlataforma[strcspn(novaPlataforma, "\n")] = '\0';
                     strncpy(jogoEncontrado->jogo.plataforma, novaPlataforma, sizeof(jogoEncontrado->jogo.plataforma) - 1);
                     printf("Plataforma atualizada!\n");
                     break;
                 }
                 case 3:{
                     printf("Digite a nova desenvolvedora do jogo: ");
-                    scanf("%s", novadesenvolvedora);
                     limpar_buffer_entrada();
+                    fgets(novadesenvolvedora, sizeof(novadesenvolvedora), stdin);
+                    novadesenvolvedora[strcspn(novadesenvolvedora, "\n")] = '\0';
                     strncpy(jogoEncontrado->jogo.desenvolvedora, novadesenvolvedora, sizeof(jogoEncontrado->jogo.desenvolvedora) - 1);
                     printf("Desenvolvedora atualizada!\n");
                     break;
                 }
                 case 4:{
                     printf("Digite o novo genero do jogo: ");
-                    scanf("%s", novoGenero);
                     limpar_buffer_entrada();
+                    fgets(novoGenero, sizeof(novoGenero), stdin);
+                    novoGenero[strcspn(novoGenero, "\n")] = '\0';
                     strncpy(jogoEncontrado->jogo.genero, novoGenero, sizeof(jogoEncontrado->jogo.genero) - 1);
                     printf("Genero atualizado!\n");
                     break;
                 }
                 case 5:{
-                    limpar_buffer_entrada();
                    while(printf("Digite o ano do jogo: ") && scanf("%d", &novoAno) != 1){
-                    printf("Ano invalido\n");
-                    limpar_buffer_entrada();
+                    printf("O ano deve ser composto somente de numeros!\n");
 
                 } 
-                    limpar_buffer_entrada();
                     jogoEncontrado->jogo.ano  = novoAno;
                     printf("Ano atualizado!\n");
                     break;
@@ -270,7 +271,7 @@ int main() {
 
                
                 while ( printf("Digite o ID do jogo: ") && scanf("%d", &id) != 1) {
-                    printf("Entrada invalida!\n");
+                    printf("O ID deve ser composto somente de numeros!\n");
                     limpar_buffer_entrada();
                 }
                 limpar_buffer_entrada();
@@ -292,7 +293,7 @@ int main() {
                 genero[strcspn(genero, "\n")] = '\0';
 
                 while(printf("Digite o ano do jogo: ") && scanf("%d", &ano) != 1){
-                    printf("Ano invalido\n");
+                    printf("O ano deve ser composto somente de numeros!\n");
                     limpar_buffer_entrada();
 
                 } 
@@ -304,7 +305,7 @@ int main() {
             case 2: {
                 int id;
                 while ( printf("Digite o ID do jogo: ") && scanf("%d", &id) != 1) {
-                    printf("Entrada invalida!\n");
+                    printf("O ID deve ser composto somente de numeros!\n");
                     limpar_buffer_entrada();
                 }
                 limpar_buffer_entrada();
@@ -325,7 +326,7 @@ int main() {
             case 4: {
                 int id;
                 while ( printf("Digite o ID do jogo a ser atualizado: ") && scanf("%d", &id) != 1) {
-                    printf("Entrada invalida!\n");
+                    printf("O ID deve ser composto somente de numeros!\n");
                     limpar_buffer_entrada();
                 }
                 limpar_buffer_entrada();
@@ -336,7 +337,7 @@ int main() {
             case 5: {
                 int id;
                while ( printf("Digite o ID para remove-lo: ") && scanf("%d", &id) != 1) {
-                    printf("Entrada invalida!\n");
+                    printf("O ID deve ser composto somente de numeros!\n");
                     limpar_buffer_entrada();
                 }
                 limpar_buffer_entrada();

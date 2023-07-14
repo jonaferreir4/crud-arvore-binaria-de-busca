@@ -68,24 +68,27 @@ void insercao_arvore(int id, const char *nome, const char *plataforma, const cha
             pt1->jogo = novoJogo;
             pt1->esq = NULL;
             pt1->dir = NULL;
+            pt1->pai = NULL;
             if (id < pt->jogo.id) {
                 pt->esq = pt1;
                 printf("jogo adicionado!\n");
+                pt1->pai = pt;
             } else {
                 pt->dir = pt1;
                 printf("jogo adicionado!\n");
+                pt1->pai = pt;
             }
-            pt1->pai = pt;
         }
     } else {
         NO *pt1 = malloc(sizeof(NO));
         pt1->jogo = novoJogo;
         pt1->esq = NULL;
         pt1->dir = NULL;
-        pt1->pai = pt;
+        pt1->pai = NULL;
         raiz = pt1;
         printf("jogo adicionado!\n");
     }
+  
 }
 
 NO *achar_sucessor(NO *pt) {
@@ -191,20 +194,34 @@ void remover(int x) {
             } else {
                 pt->pai->dir = NULL;
             }
+            free(pt);
         } else {
             raiz = NULL;
+            free(pt);
         }
-        free(pt);
         printf("jogo removido com sucesso\n");
-    } else if ((pt->dir == NULL) ^ (pt->esq == NULL)) { // com um filho
-        if (pt->dir == NULL) {
-            pt->pai->dir = pt->esq;
-        } else if (pt->esq == NULL) {
-            pt->pai->esq = pt->dir;
-        }
-        free(pt);
-        printf("jogo removido com sucesso\n");
-    } else {
+    } else if ((pt->dir == NULL) || (pt->esq == NULL)) { // com um filho
+                NO *filho;
+                if (pt->esq != NULL) {
+                    filho = pt->esq;
+                } else {
+                    filho = pt->dir;
+                }
+
+                if (pt->pai != NULL) {
+                    if (pt->jogo.id < pt->pai->jogo.id) {
+                        pt->pai->esq = filho;
+                    } else {
+                        pt->pai->dir = filho;
+                    }
+                    filho->pai = pt->pai;
+                } else {
+                    raiz = filho;
+                    filho->pai = NULL;
+                }
+                free(pt);
+                printf("jogo removido com sucesso\n");
+    } else { // com dois filhos
         NO *sucessor = achar_sucessor(pt->dir);
         int temp = sucessor->jogo.id;
         remover(sucessor->jogo.id);

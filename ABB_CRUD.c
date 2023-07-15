@@ -157,8 +157,9 @@ void atualizar_arvore(int id) {
                 case 5:{
                    while(printf("Digite o ano do jogo: ") && scanf("%d", &novoAno) != 1){
                     printf("O ano deve ser composto somente de numeros!\n");
-
+                    limpar_buffer_entrada();
                 } 
+                    limpar_buffer_entrada();
                     jogoEncontrado->jogo.ano  = novoAno;
                     printf("Ano atualizado!\n");
                     break;
